@@ -1,17 +1,46 @@
 package org.chat.handsondoctor.model;
-import java.util.Date;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@DynamoDBTable(tableName = "Message")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Message {
 
+    @DynamoDBHashKey(attributeName = "room_id")
     private String roomId;
-    private String messageId;
-    private String userName;
+
+    // timestamp + message_id
+    @DynamoDBRangeKey(attributeName = "message_sort_key")
+    private String messageSortKey;
+
+    @DynamoDBAttribute(attributeName = "nick_name")
+    private String nickName;
+
+    @DynamoDBAttribute(attributeName = "receiver_name")
     private String receiverName;
+
+    @DynamoDBIndexRangeKey(localSecondaryIndexName = "user_id_index")
+    @DynamoDBAttribute(attributeName = "user_id")
     private String userId;
+
+    @DynamoDBAttribute(attributeName = "receiver_id")
     private String receiverId;
+
+    @DynamoDBAttribute(attributeName = "message")
     private String message;
-    private Date messageTime;
+
+    @DynamoDBIndexRangeKey(localSecondaryIndexName = "type_index")
+    @DynamoDBAttribute(attributeName = "type_index")
     private String type;
+
+    @DynamoDBIndexRangeKey(localSecondaryIndexName = "is_read_index")
+    @DynamoDBAttribute(attributeName = "is_read")
     private boolean isRead;
+
+    @DynamoDBAttribute(attributeName = "image_url")
     private String imageUrl;
 }
