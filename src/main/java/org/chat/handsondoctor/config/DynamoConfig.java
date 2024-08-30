@@ -1,30 +1,31 @@
 package org.chat.handsondoctor.config;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class DynamoConfig {
 
-    // code 레벨에서 해당 값을 저장하는 방법이 맞는가?
-    private static final String AWS_ACCESS_KEY = "";
-    private static final String AWS_SECRET_KEY = "";
-    private static final String AWS_REGION = "";
+    // ECS, EC2 등에서 실행 시 자동으로 리전 정보 등을 조회.
+    @Value("${amazon.aws.region}")
+    private String region;
 
-    public static DynamoDBMapper createDynamoDBMapper() {
-        return new DynamoDBMapper(createAmazonDynamoDB(), DynamoDBMapperConfig.DEFAULT);
+    @Bean
+    public DynamoDBMapper dynamoDBMapper() {
+        return new DynamoDBMapper(amazonDynamoDB());
     }
 
-    private static AmazonDynamoDB createAmazonDynamoDB() {
+    @Bean
+    public AmazonDynamoDB amazonDynamoDB() {
         return AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(
-                        "dynamodb" + AWS_REGION + ".amazonaws.com", AWS_REGION))
-                .withCredentials(new AWSStaticCredentialsProvider(
-                        new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY)))
+                .withRegion(Regions.fromName(region))
+                .withCredentials(new InstanceProfileCredentialsProvider(false))
                 .build();
     }
 }
