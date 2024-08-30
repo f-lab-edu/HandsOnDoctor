@@ -1,19 +1,12 @@
 package org.chat.handsondoctor.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import lombok.*;
 
 import java.util.Date;
 
 @DynamoDBTable(tableName = "Account")
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class Account {
 
     @DynamoDBHashKey(attributeName = "user_id")
@@ -35,6 +28,7 @@ public class Account {
     private String phoneNumber;
 
     @DynamoDBAttribute(attributeName = "create_at")
+    @DynamoDBTypeConvertedTimestamp(pattern="yyyyMMddHHmmssSSS")
     private Date createdAt;
 
     @DynamoDBAttribute(attributeName = "role")
@@ -43,6 +37,7 @@ public class Account {
     @DynamoDBAttribute(attributeName = "refresh_token")
     private String refreshToken;
 
-    @DynamoDBAttribute(attributeName = "tokneExpiryDate")
+    @DynamoDBAttribute(attributeName = "tokenExpiryDate")
+    @DynamoDBTypeConvertedTimestamp(pattern="yyyyMMddHHmmssSSS")
     private Date tokenExpiryDate;
 }

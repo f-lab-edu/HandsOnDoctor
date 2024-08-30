@@ -1,13 +1,10 @@
 package org.chat.handsondoctor.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @DynamoDBTable(tableName = "Message")
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
+@Builder
 public class Message {
 
     @DynamoDBHashKey(attributeName = "room_id")

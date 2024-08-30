@@ -1,14 +1,10 @@
 package org.chat.handsondoctor.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @DynamoDBTable(tableName = "User")
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class User {
 
     // PK : nickName;
