@@ -2,41 +2,42 @@ package org.chat.handsondoctor.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import lombok.*;
 
+import java.util.Date;
+
 @DynamoDBTable(tableName = "Message")
 @Data
 @Builder
 public class Message {
 
-    @DynamoDBHashKey(attributeName = "room_id")
+    @DynamoDBHashKey(attributeName = "message_id")
+    private String messageId;
+
+    @DynamoDBRangeKey(attributeName = "message_time")
+    @DynamoDBTypeConvertedTimestamp(pattern="yyyyMMddHHmmssSSS")
+    private String messageTime;
+
+    @DynamoDBIndexRangeKey(localSecondaryIndexName = "room_id_index")
+    @DynamoDBAttribute(attributeName = "room_id")
     private String roomId;
 
-    // timestamp + message_id
-    @DynamoDBRangeKey(attributeName = "message_sort_key")
-    private String messageSortKey;
+    @DynamoDBIndexRangeKey(localSecondaryIndexName = "from_index")
+    @DynamoDBAttribute(attributeName = "from")
+    private String from;
 
-    @DynamoDBAttribute(attributeName = "nick_name")
-    private String nickName;
+    @DynamoDBAttribute(attributeName = "to")
+    private String to;
 
-    @DynamoDBAttribute(attributeName = "receiver_name")
-    private String receiverName;
+    @DynamoDBAttribute(attributeName = "from_name")
+    private String fromName;
 
-    @DynamoDBIndexRangeKey(localSecondaryIndexName = "user_id_index")
-    @DynamoDBAttribute(attributeName = "user_id")
-    private String userId;
-
-    @DynamoDBAttribute(attributeName = "receiver_id")
-    private String receiverId;
+    @DynamoDBAttribute(attributeName = "to_name")
+    private String toName;
 
     @DynamoDBAttribute(attributeName = "message")
     private String message;
 
-    @DynamoDBIndexRangeKey(localSecondaryIndexName = "type_index")
-    @DynamoDBAttribute(attributeName = "type_index")
+    @DynamoDBAttribute(attributeName = "type")
     private String type;
-
-    @DynamoDBIndexRangeKey(localSecondaryIndexName = "is_read_index")
-    @DynamoDBAttribute(attributeName = "is_read")
-    private boolean isRead;
 
     @DynamoDBAttribute(attributeName = "image_url")
     private String imageUrl;
