@@ -3,6 +3,7 @@ package org.chat.handsondoctor.controller;
 import org.chat.handsondoctor.model.Message;
 import org.chat.handsondoctor.service.MessageService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 public class StompController {
@@ -18,6 +19,7 @@ public class StompController {
 
     // message 전송
     @MessageMapping("/chat/{roomId}/sendMessage")
+    @SendTo("/topic/{roomId}")
     public void sendMessage(Message message) {
         simpMessagingTemplate.convertAndSend("/chat/" + message.getRoomId(), message);
         messageService.sendMessage(message);

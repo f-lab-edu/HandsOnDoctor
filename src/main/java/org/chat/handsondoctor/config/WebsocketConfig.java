@@ -1,24 +1,34 @@
 package org.chat.handsondoctor.config;
 
+import org.chat.handsondoctor.handler.WebSocketHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.*;
+import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
 
 @Configuration
-@EnableWebSocketMessageBroker
-public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
+@EnableWebSocket
+public class WebsocketConfig implements WebSocketConfigurer {
 
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");  // 메시지를 구독하는 경로
-        config.setApplicationDestinationPrefixes("/app");  // 클라이언트에서 메시지를 보낼 때 사용되는 경로
+    // session 관리 확인 필요
+    private final WebSocketHandler webSocketHandler;
+
+    public WebsocketConfig(WebSocketHandler webSockectHandler) {
+        this.webSocketHandler = webSockectHandler;
     }
 
+
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")  // WebSocket 연결 엔드포인트
-                .setAllowedOriginPatterns("*")
-                .withSockJS();  // SockJS를 통한 fallback 지원
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(webSocketHandler, "/ws/topic/{roomId}");
+    }
+
+    @Bean
+    public ServletServerContainerFactoryBean createWebSocketContainer() {
+        // 추후 대규모 서비스에서 정상 작동하는지 추측 후 수정 필요.
+        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
+        container.setMaxTextMessageBufferSize(500000);
+        container.setMaxBinaryMessageBufferSize(500000);
+        return container;
     }
 }
