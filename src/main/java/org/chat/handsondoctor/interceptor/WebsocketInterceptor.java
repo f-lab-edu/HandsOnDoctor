@@ -1,5 +1,6 @@
 package org.chat.handsondoctor.interceptor;
 
+import org.chat.handsondoctor.StompPrincipal;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -21,8 +22,11 @@ public class WebsocketInterceptor implements HandshakeInterceptor {
         List<String> authHeaders = request.getHeaders().get("Authorization");
 
         if (authHeaders != null && !authHeaders.isEmpty()) {
-
+            String userId = authHeaders.get(0);
+            attributes.put("principal", new StompPrincipal(userId));
+            return true;
         }
+
         return false;
     }
 
