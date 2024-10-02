@@ -1,34 +1,27 @@
 package org.chat.handsondoctor.config;
 
-import org.chat.handsondoctor.handler.WebSocketHandler;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
-import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
 
 @Configuration
-@EnableWebSocket
-public class WebsocketConfig implements WebSocketConfigurer {
-
-    // session 관리 확인 필요
-    private final WebSocketHandler webSocketHandler;
-
-    public WebsocketConfig(WebSocketHandler webSockectHandler) {
-        this.webSocketHandler = webSockectHandler;
-    }
+@EnableWebSocketMessageBroker
+public class WebsocketConfig implements WebSocketMessageBrokerConfigurer  {
 
 
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler, "/ws/topic/{roomId}");
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        // 메시지를 전달하는 목적지 경로를 설정
+        config.enableSimpleBroker("/topic", "/queue", "/user");  // 클라이언트가 구독할 수 있는 경로들
+        config.setApplicationDestinationPrefixes("/app");  // 클라이언트가 메시지를 보낼 경로의 Prefix
+        config.setUserDestinationPrefix("/user"); // 특정 사용자에게 메시지를 보낼 경로의 Prefix
     }
 
-    @Bean
-    public ServletServerContainerFactoryBean createWebSocketContainer() {
-        // 추후 대규모 서비스에서 정상 작동하는지 추측 후 수정 필요.
-        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
-        container.setMaxTextMessageBufferSize(500000);
-        container.setMaxBinaryMessageBufferSize(500000);
-        return container;
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // 클라이언트가 WebSocket에 연결할 엔드포인트 설정
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();  // SockJS 사용 (WebSocket을 지원하지 않는 브라우저에 대한 대체 방식)
     }
 }
