@@ -27,13 +27,13 @@ public class CustomStompSessionHandler extends StompSessionHandlerAdapter {
             byte[] payload, Throwable exception
     ) {
         // 예외 처리 로직
-        logger.debug("Got an exception: " + exception);
+        logger.debug("Got an exception: {}", exception.getMessage());
     }
 
     @Override
     public void handleTransportError(StompSession session, Throwable exception) {
         // 전송 에러 처리 로직
-        logger.debug("Transport Error: " + exception);
+        logger.debug("Transport Error: {}", exception.getMessage());
     }
 
     @Override
@@ -46,6 +46,6 @@ public class CustomStompSessionHandler extends StompSessionHandlerAdapter {
     public void handleFrame(StompHeaders headers, Object payload) {
         // 수신한 메시지 처리 로직
         Message msg = (Message) payload;
-        logger.debug("Received : " + msg.getContent());
+        logger.debug("Received : {}", msg.getContent());
     }
 }

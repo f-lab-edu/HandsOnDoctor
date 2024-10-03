@@ -48,7 +48,6 @@ public class StompController {
                           @Payload Message message,
                           Principal principal) {
 
-        logger.info("Received message in room {}: {}", roomId, message.getContent());
 
         String senderId = principal.getName();
         message.setFrom(senderId);

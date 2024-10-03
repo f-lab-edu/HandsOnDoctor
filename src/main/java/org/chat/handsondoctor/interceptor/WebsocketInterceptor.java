@@ -25,21 +25,8 @@ public class WebsocketInterceptor implements HandshakeInterceptor {
         // Autherization token
         logger.debug("메시지 인터셉터 확인");
         boolean isRoomIdHere = getRoomIdFromRequest(request, attributes);
-        boolean isVerityPrincipal = getPrincipal(request, attributes);
-        if (isRoomIdHere && isVerityPrincipal) return true;
+        if (isRoomIdHere) return true;
         return false;
-    }
-
-    private boolean getPrincipal(ServerHttpRequest request, Map<String, Object> attributes) {
-        List<String> authHeaders = request.getHeaders().get("Authorization");
-
-        if (authHeaders != null && !authHeaders.isEmpty()) {
-//            String userId = authHeaders.getFirst();
-//            attributes.put("principal", new StompPrincipal(userId));
-            logger.debug("메시지 인터셉터 : principal");
-            return true;
-        }
-        return true;
     }
 
     private boolean getRoomIdFromRequest(ServerHttpRequest request, Map<String, Object> attributes) {
