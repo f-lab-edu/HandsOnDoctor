@@ -21,11 +21,12 @@ public class WebsocketInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request,
                                    ServerHttpResponse response,
                                    WebSocketHandler wsHandler,
-                                   Map<String, Object> attributes) throws Exception {
+                                   Map<String, Object> attributes) {
         // Autherization token
         logger.debug("메시지 인터셉터 확인");
         boolean isRoomIdHere = getRoomIdFromRequest(request, attributes);
-        if (isRoomIdHere) return true;
+        boolean isVerityPrincipal = getPrincipal(request, attributes);
+        if (isRoomIdHere && isVerityPrincipal) return true;
         return false;
     }
 
@@ -33,12 +34,12 @@ public class WebsocketInterceptor implements HandshakeInterceptor {
         List<String> authHeaders = request.getHeaders().get("Authorization");
 
         if (authHeaders != null && !authHeaders.isEmpty()) {
-            String userId = authHeaders.get(0);
-            attributes.put("principal", new StompPrincipal(userId));
+//            String userId = authHeaders.getFirst();
+//            attributes.put("principal", new StompPrincipal(userId));
             logger.debug("메시지 인터셉터 : principal");
             return true;
         }
-        return false;
+        return true;
     }
 
     private boolean getRoomIdFromRequest(ServerHttpRequest request, Map<String, Object> attributes) {

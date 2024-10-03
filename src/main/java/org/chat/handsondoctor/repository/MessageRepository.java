@@ -19,20 +19,4 @@ public class MessageRepository {
     public void save(Message message) {
         dynamoDBMapper.save(message);
     }
-
-    public List<Message> findMessagesByRoomId(String roomId) {
-        return Collections.singletonList(dynamoDBMapper.load(Message.class, roomId));
-    }
-
-    public List<Message> findMessagesByMessageId(String messageId) {
-        return Collections.singletonList(dynamoDBMapper.load(Message.class, messageId));
-    }
-
-    public List<Message> findMessagesByUserId(String userId) {
-        return Collections.singletonList(dynamoDBMapper.load(Message.class, userId));
-    }
-
-    public List<Message> updateMessage(Message message) {
-        return Collections.singletonList(dynamoDBMapper.load(Message.class, message));
-    }
 }

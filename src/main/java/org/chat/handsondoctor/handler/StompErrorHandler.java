@@ -29,7 +29,7 @@ public class StompErrorHandler  extends StompSubProtocolErrorHandler {
 
         // 오류 메시지가 "UNAUTHORIZED"인 경우 - throw new MessageDeliveryException("UNAUTHORIZED")
         if ("UNAUTHORIZED".equals(ex.getMessage())) {
-            return errorMessage("유효하지 않은 권한입니다.");
+            return errorMessage("UNAUTHORIZED : " + ex.getMessage());
         }
 
         return super.handleClientMessageProcessingError(clientMessage, ex);

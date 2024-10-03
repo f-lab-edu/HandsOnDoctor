@@ -2,24 +2,26 @@ package org.chat.handsondoctor.controller;
 
 import org.chat.handsondoctor.config.LoggerFactoryConfig;
 import org.chat.handsondoctor.model.Message;
-import org.chat.handsondoctor.service.MessageService;
+import org.chat.handsondoctor.service.StompService;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 
+@Controller
 public class StompController {
 
-    private final MessageService messageService;
+    private final StompService stompService;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private static final Logger logger = LoggerFactoryConfig.getLogger(StompController.class);
 
-
-    public StompController(MessageService messageService, SimpMessagingTemplate simpMessagingTemplate) {
-        this.messageService = messageService;
+    public StompController(StompService stompService, SimpMessagingTemplate simpMessagingTemplate) {
+        this.stompService = stompService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -37,7 +39,7 @@ public class StompController {
 
         simpMessagingTemplate.convertAndSendToUser(
                 message.getTo(), "/user/chat/" + roomId, message);
-        messageService.sendMessage(message);
+        stompService.sendMessage(message);
     }
 
     // image 전송
@@ -52,7 +54,7 @@ public class StompController {
         message.setFrom(senderId);
         message.setRoomId(roomId);
         simpMessagingTemplate.convertAndSend("/user/chat/" + roomId, message);
-        messageService.sendImage(message);
+        stompService.sendImage(message);
     }
 
     // message 수정

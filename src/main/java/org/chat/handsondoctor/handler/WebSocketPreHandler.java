@@ -2,7 +2,6 @@ package org.chat.handsondoctor.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.chat.handsondoctor.config.LoggerFactoryConfig;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +11,8 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+
+import java.util.Objects;
 
 @Slf4j
 @Configuration
@@ -35,9 +36,9 @@ public class WebSocketPreHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor =
                 MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-        StompCommand command = accessor.getCommand();
+        StompCommand command = Objects.requireNonNull(accessor).getCommand();
 
-        if (command != null && StompCommand.CONNECT.equals(command)) {
+        if (StompCommand.CONNECT.equals(command)) {
             // 토큰 검증 로직
             logger.debug("token authorization : {}", accessor.getSessionId());
         }

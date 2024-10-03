@@ -17,7 +17,7 @@ public class StompService {
         messageRepository.save(message);
     }
 
-    public void updateMessage(Message message) {
-        messageRepository.updateMessage(message);
+    public void sendImage(Message message) {
+        messageRepository.save(message);
     }
 }
