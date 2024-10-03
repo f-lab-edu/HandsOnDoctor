@@ -7,6 +7,8 @@ import java.util.Date;
 @DynamoDBTable(tableName = "Message")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Message {
 
     @DynamoDBHashKey(attributeName = "message_id")

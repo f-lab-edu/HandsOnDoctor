@@ -9,6 +9,10 @@ import java.util.List;
 @Service
 public class MessageService {
 
+    /**
+     * 동작방식은 다를 수 있으나 StompService와 동일한 기능을 제공해주어야 한다.
+    * */
+
     private final MessageRepository messageRepository;
 
     public MessageService(MessageRepository messageRepository) {
