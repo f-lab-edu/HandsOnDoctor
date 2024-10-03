@@ -2,8 +2,6 @@ package org.chat.handsondoctor.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import lombok.*;
 
-import java.util.Date;
-
 @DynamoDBTable(tableName = "Message")
 @Data
 @Builder
@@ -36,7 +34,7 @@ public class Message {
     private String toName;
 
     @DynamoDBAttribute(attributeName = "message")
-    private String message;
+    private String content;
 
     @DynamoDBAttribute(attributeName = "type")
     private String type;

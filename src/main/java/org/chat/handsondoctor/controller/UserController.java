@@ -24,8 +24,4 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{nickName}")
-    public void addUser(@RequestBody User user) {
-        userService.addUser(user);
-    }
 }

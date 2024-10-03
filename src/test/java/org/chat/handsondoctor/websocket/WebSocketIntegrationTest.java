@@ -8,15 +8,15 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
-import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class WebSocketIntegrationTest {
+class WebSocketIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -24,7 +24,7 @@ public class WebSocketIntegrationTest {
     private final WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
 
     @Test
-    public void testSendMessage() throws Exception {
+    void testSendMessage() throws Exception {
         String url = "ws://localhost:" + port + "/ws?roomId=1234";
 
         WebSocketStompClient stompClient = new WebSocketStompClient(new StandardWebSocketClient());
@@ -34,12 +34,12 @@ public class WebSocketIntegrationTest {
         StompSessionHandler sessionHandler = new CustomStompSessionHandler();
 
         // 연결 시작
-        ListenableFuture<StompSession> future = stompClient.connect(url, headers, sessionHandler);
+        CompletableFuture<StompSession> future = stompClient.connectAsync(url, headers, sessionHandler);
         StompSession session = future.get(5, TimeUnit.SECONDS);
 
         // 메시지 전송
         Message message = new Message();
-        message.setMessage("Hello World");
+        message.setContent("Hello World");
         message.setRoomId("1234");
         message.setFrom("user1");
         message.setTo("user2");

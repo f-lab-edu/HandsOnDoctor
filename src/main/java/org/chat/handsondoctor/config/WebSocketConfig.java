@@ -29,7 +29,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer  {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // 메시지를 전달하는 목적지 경로를 설정
-        // TODO : enableSimpleBroker를 통해 어떤 Websocket을 열고자 하는지 찾아봐야 한다.
         config.enableSimpleBroker("/topic", "/queue", "/user");
         config.setApplicationDestinationPrefixes("/app");
         config.setUserDestinationPrefix("/user");
