@@ -4,7 +4,6 @@ import org.chat.handsondoctor.config.LoggerFactoryConfig;
 import org.chat.handsondoctor.model.Message;
 import org.chat.handsondoctor.service.StompService;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
